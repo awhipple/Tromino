@@ -52,7 +52,7 @@ public class Tromino extends BasicGame {
             }
         }
         try {
-            fillTromino(0, 0, GRID_SIZE, GRID_SIZE, dx, dy);
+            fillTromino(0, 0, GRID_SIZE, dx, dy);
         } catch (TrominoOverlapException ex) {
             System.out.println();
             System.out.println("A SQUARE WAS JUST OVERLAPPED!!!");
@@ -66,59 +66,57 @@ public class Tromino extends BasicGame {
     /**
      * @param x The starting x position you want to fill
      * @param y The starting y position you want to fill
-     * @param w The width of the section you want to fill
-     * @param h The height of the section you want to fill
+     * @param s The size of the grid
      * @param dx The x location of the deficiency in the grid
      * @param dy The y location of the deficiency in the grid
      * 
      * Domain:  0 <= x < GRID_SIZE
      *          0 <= y < GRID_SIZE
-     *          0 < w <= GRID_SIZE - x
-     *          0 < h <= GRID_SIZE - y
-     *          x <= dx < x + w
-     *          y <= dy < y + h
+     *          0 < s <= GRID_SIZE - x; s = 2^n for all n in Z
+     *          x <= dx < x + s
+     *          y <= dy < y + s
      */
-    public void fillTromino(int x, int y, int w, int h, int dx, int dy) throws TrominoOverlapException {
-        if(w == 1 || h == 1) return;
-        int nw = w/2, nh = h/2;
-        switch(deficiencyQuadrant(x, y, w, h, dx, dy)) {
-            case 1: placeBLTrominoAtCenter(x, y, w, h);
-                    fillTromino(x, y, nw, nh, x+nw-1, y+nh-1);
-                    fillTromino(x+nw, y, nw, nh, dx, dy);
-                    fillTromino(x, y+nh, nw, nh, x+nw-1, y+nh);
-                    fillTromino(x+nw, y+nh, nw, nh, x+nw, y+nh);
+    public void fillTromino(int x, int y, int s, int dx, int dy) throws TrominoOverlapException {
+        if(s == 1) return;
+        int ns = s/2;
+        switch(deficiencyQuadrant(x, y, s, dx, dy)) {
+            case 1: placeBLTrominoAtCenter(x, y, s);
+                    fillTromino(x, y, ns, x+ns-1, y+ns-1);
+                    fillTromino(x+ns, y, ns, dx, dy);
+                    fillTromino(x, y+ns, ns, x+ns-1, y+ns);
+                    fillTromino(x+ns, y+ns, ns, x+ns, y+ns);
                     break;
-            case 2: placeBRTrominoAtCenter(x, y, w, h);
-                    fillTromino(x, y, nw, nh, dx, dy);
-                    fillTromino(x+nw, y, nw, nh, x+nw, y+nh-1);
-                    fillTromino(x, y+nh, nw, nh, x+nw-1, y+nh);
-                    fillTromino(x+nw, y+nh, nw, nh, x+nw, y+nh);
+            case 2: placeBRTrominoAtCenter(x, y, s);
+                    fillTromino(x, y, ns, dx, dy);
+                    fillTromino(x+ns, y, ns, x+ns, y+ns-1);
+                    fillTromino(x, y+ns, ns, x+ns-1, y+ns);
+                    fillTromino(x+ns, y+ns, ns, x+ns, y+ns);
                     break;
-            case 3: placeURTrominoAtCenter(x, y, w, h);
-                    fillTromino(x, y, nw, nh, x+nw-1, y+nh-1);
-                    fillTromino(x+nw, y, nw, nh, x+nw, y+nh-1);
-                    fillTromino(x, y+nh, nw, nh, dx, dy);
-                    fillTromino(x+nw, y+nh, nw, nh, x+nw, y+nh);
+            case 3: placeURTrominoAtCenter(x, y, s);
+                    fillTromino(x, y, ns, x+ns-1, y+ns-1);
+                    fillTromino(x+ns, y, ns, x+ns, y+ns-1);
+                    fillTromino(x, y+ns, ns, dx, dy);
+                    fillTromino(x+ns, y+ns, ns, x+ns, y+ns);
                     break;
-            case 4: placeULTrominoAtCenter(x, y, w, h);
-                    fillTromino(x, y, nw, nh, x+nw-1, y+nh-1);
-                    fillTromino(x+nw, y, nw, nh, x+nw, y+nh-1);
-                    fillTromino(x, y+nh, nw, nh, x+nw-1, y+nh);
-                    fillTromino(x+nw, y+nh, nw, nh, dx, dy);
+            case 4: placeULTrominoAtCenter(x, y, s);
+                    fillTromino(x, y, ns, x+ns-1, y+ns-1);
+                    fillTromino(x+ns, y, ns, x+ns, y+ns-1);
+                    fillTromino(x, y+ns, ns, x+ns-1, y+ns);
+                    fillTromino(x+ns, y+ns, ns, dx, dy);
                     break;
         }
     }
     
     //Returns the (Cartesian) quadrant containing the deficient square
-    public int deficiencyQuadrant(int x, int y, int w, int h, int dx, int dy) {
-        if(dx < x+w/2) {
-            if(dy < y+h/2) {
+    public int deficiencyQuadrant(int x, int y, int s, int dx, int dy) {
+        if(dx < x+s/2) {
+            if(dy < y+s/2) {
                 return 2;
             } else {
                 return 3;
             }
         } else {
-            if(dy < y+h/2) {
+            if(dy < y+s/2) {
                 return 1;
             } else {
                 return 4;
@@ -127,35 +125,35 @@ public class Tromino extends BasicGame {
     }
     
     //Places the upper left tromino
-    public void placeULTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
-        Color trominoColor = new Color((int)(int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
-        addBlock((int)(x+w/2-1),(int)(y+h/2-1),trominoColor);
-        addBlock((int)(x+w/2),(int)(y+h/2-1),trominoColor);
-        addBlock((int)(x+w/2-1),(int)(y+h/2),trominoColor);
+    public void placeULTrominoAtCenter(int x, int y, int s) throws TrominoOverlapException {
+        Color trominoColor = randomColor();
+        addBlock((int)(x+s/2-1),(int)(y+s/2-1),trominoColor);
+        addBlock((int)(x+s/2),(int)(y+s/2-1),trominoColor);
+        addBlock((int)(x+s/2-1),(int)(y+s/2),trominoColor);
     }
     
     //Places the upper right tromino
-    public void placeURTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
-        Color trominoColor = new Color((int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
-        addBlock((int)(x+w/2-1),(int)(y+h/2-1),trominoColor);
-        addBlock((int)(x+w/2),(int)(y+h/2-1),trominoColor);
-        addBlock((int)(x+w/2),(int)(y+h/2),trominoColor);
+    public void placeURTrominoAtCenter(int x, int y, int s) throws TrominoOverlapException {
+        Color trominoColor = randomColor();
+        addBlock((int)(x+s/2-1),(int)(y+s/2-1),trominoColor);
+        addBlock((int)(x+s/2),(int)(y+s/2-1),trominoColor);
+        addBlock((int)(x+s/2),(int)(y+s/2),trominoColor);
     }
     
     //Places the bottom left tromino
-    public void placeBLTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
-        Color trominoColor = new Color((int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
-        addBlock((int)(x+w/2-1),(int)(y+h/2-1),trominoColor);
-        addBlock((int)(x+w/2-1),(int)(y+h/2),trominoColor);
-        addBlock((int)(x+w/2),(int)(y+h/2),trominoColor);
+    public void placeBLTrominoAtCenter(int x, int y, int s) throws TrominoOverlapException {
+        Color trominoColor = randomColor();
+        addBlock((int)(x+s/2-1),(int)(y+s/2-1),trominoColor);
+        addBlock((int)(x+s/2-1),(int)(y+s/2),trominoColor);
+        addBlock((int)(x+s/2),(int)(y+s/2),trominoColor);
     }
     
     //Places the bottom right tromino
-    public void placeBRTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
-        Color trominoColor = new Color((int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
-        addBlock((int)(x+w/2),(int)(y+h/2-1),trominoColor);
-        addBlock((int)(x+w/2-1),(int)(y+h/2),trominoColor);
-        addBlock((int)(x+w/2),(int)(y+h/2),trominoColor);
+    public void placeBRTrominoAtCenter(int x, int y, int s) throws TrominoOverlapException {
+        Color trominoColor = randomColor();
+        addBlock((int)(x+s/2),(int)(y+s/2-1),trominoColor);
+        addBlock((int)(x+s/2-1),(int)(y+s/2),trominoColor);
+        addBlock((int)(x+s/2),(int)(y+s/2),trominoColor);
     }
 
     //Activates a single block on the grid
@@ -211,6 +209,10 @@ public class Tromino extends BasicGame {
             }
         }
         return foundDeficientBlock;
+    }
+    
+    public Color randomColor() {
+        return new Color((int)(Math.random()*256),(int)(Math.random()*256),(int)(Math.random()*256));
     }
     
     @Override
