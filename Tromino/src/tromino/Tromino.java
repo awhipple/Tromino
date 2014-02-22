@@ -4,8 +4,6 @@
  */
 package tromino;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.BasicGame;
 import org.newdawn.slick.Color;
@@ -20,7 +18,7 @@ import org.newdawn.slick.SlickException;
 public class Tromino extends BasicGame {
     
     //Edit these
-    private static final int SIZE_ROOT = 4;
+    private static final int SIZE_ROOT = 5;
     private static final int SCREEN_W = 800, SCREEN_H = 600;
     private static final int SCREEN_PADDING = 20;
 
@@ -37,24 +35,30 @@ public class Tromino extends BasicGame {
     @Override
     public void init(GameContainer gc) throws SlickException {
         
-        for(int i = 0; i < 10000; i++) {
-            for(int y = 0; y < GRID_SIZE; y++) {
-                for(int x = 0; x < GRID_SIZE; x++) {
-                    grid[x][y] = Color.black;
-                }
+        for(int dx = 0; dx < GRID_SIZE; dx++) {
+            for(int dy = 0; dy < GRID_SIZE; dy++) {
+                trominoRun(dx, dy);
             }
-            int dx = (int)(Math.random()*GRID_SIZE);
-            int dy = (int)(Math.random()*GRID_SIZE);
-            try {
-                fillTromino(0, 0, GRID_SIZE, GRID_SIZE, dx, dy);
-            } catch (TrominoOverlapException ex) {
-                System.out.println();
-                System.out.println("A SQUARE WAS JUST OVERLAPPED!!!");
+        }
+        
+        trominoRun((int)(Math.random()*GRID_SIZE),(int)(Math.random()*GRID_SIZE));
+    }
+    
+    public void trominoRun(int dx, int dy) {
+        for(int y = 0; y < GRID_SIZE; y++) {
+            for(int x = 0; x < GRID_SIZE; x++) {
+                grid[x][y] = Color.black;
             }
-            if(!verifyPuzzleIsSolved()) {
-                System.out.println();
-                System.out.println("A PUZZLE WAS NOT SOLVED CORRECTLY!!!");
-            }
+        }
+        try {
+            fillTromino(0, 0, GRID_SIZE, GRID_SIZE, dx, dy);
+        } catch (TrominoOverlapException ex) {
+            System.out.println();
+            System.out.println("A SQUARE WAS JUST OVERLAPPED!!!");
+        }
+        if(!verifyPuzzleIsSolved()) {
+            System.out.println();
+            System.out.println("A PUZZLE WAS NOT SOLVED CORRECTLY!!!");
         }
     }
     
