@@ -4,3 +4,6 @@
 *.jar
 *.war
 *.ear
+/Tromino/nbproject/private/
+/Tromino/build/
+/Tromino/dist/
