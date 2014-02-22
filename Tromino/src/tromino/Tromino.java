@@ -44,6 +44,7 @@ public class Tromino extends BasicGame {
         trominoRun((int)(Math.random()*GRID_SIZE),(int)(Math.random()*GRID_SIZE));
     }
     
+    //Runs the entire puzzle with deficiency block at (dx, dy)
     public void trominoRun(int dx, int dy) {
         for(int y = 0; y < GRID_SIZE; y++) {
             for(int x = 0; x < GRID_SIZE; x++) {
@@ -108,6 +109,7 @@ public class Tromino extends BasicGame {
         }
     }
     
+    //Returns the (Cartesian) quadrant containing the deficient square
     public int deficiencyQuadrant(int x, int y, int w, int h, int dx, int dy) {
         if(dx < x+w/2) {
             if(dy < y+h/2) {
@@ -124,6 +126,7 @@ public class Tromino extends BasicGame {
         }
     }
     
+    //Places the upper left tromino
     public void placeULTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
         Color trominoColor = new Color((int)(int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
         addBlock((int)(x+w/2-1),(int)(y+h/2-1),trominoColor);
@@ -131,6 +134,7 @@ public class Tromino extends BasicGame {
         addBlock((int)(x+w/2-1),(int)(y+h/2),trominoColor);
     }
     
+    //Places the upper right tromino
     public void placeURTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
         Color trominoColor = new Color((int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
         addBlock((int)(x+w/2-1),(int)(y+h/2-1),trominoColor);
@@ -138,6 +142,7 @@ public class Tromino extends BasicGame {
         addBlock((int)(x+w/2),(int)(y+h/2),trominoColor);
     }
     
+    //Places the bottom left tromino
     public void placeBLTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
         Color trominoColor = new Color((int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
         addBlock((int)(x+w/2-1),(int)(y+h/2-1),trominoColor);
@@ -145,6 +150,7 @@ public class Tromino extends BasicGame {
         addBlock((int)(x+w/2),(int)(y+h/2),trominoColor);
     }
     
+    //Places the bottom right tromino
     public void placeBRTrominoAtCenter(int x, int y, int w, int h) throws TrominoOverlapException {
         Color trominoColor = new Color((int)(Math.random()*255+1),(int)(Math.random()*255+1),(int)(Math.random()*255+1));
         addBlock((int)(x+w/2),(int)(y+h/2-1),trominoColor);
@@ -152,6 +158,7 @@ public class Tromino extends BasicGame {
         addBlock((int)(x+w/2),(int)(y+h/2),trominoColor);
     }
 
+    //Activates a single block on the grid
     public void addBlock(int x, int y, Color col) throws TrominoOverlapException {
         if(grid[x][y] != Color.black) throw new TrominoOverlapException();
         grid[x][y] = col;
