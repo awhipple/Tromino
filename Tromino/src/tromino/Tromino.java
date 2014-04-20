@@ -20,15 +20,15 @@ public class Tromino extends BasicGame {
     //Edit these
     private static final int SIZE_ROOT = 5;
     private static final int SCREEN_W = 800, SCREEN_H = 600;
-    private static final int SCREEN_PADDING = 20;
+    private static final int MIN_SCREEN_PADDING = 20;
 
     //Do not edit these
     private static final int GRID_SIZE = (int)Math.pow(2,SIZE_ROOT);
-    private static final int GRID_TARGET_SIZE = Math.min(SCREEN_W, SCREEN_H)-SCREEN_PADDING*2;
+    private static final int GRID_TARGET_SIZE = Math.min(SCREEN_W, SCREEN_H)-MIN_SCREEN_PADDING*2;
     private static final int SQUARE_DISPLAY_SIZE = (int)(GRID_TARGET_SIZE/GRID_SIZE);
     private static final int GRID_ACTUAL_SIZE = SQUARE_DISPLAY_SIZE * GRID_SIZE;
-    private static final int GRID_START_X = Math.max(SCREEN_PADDING, SCREEN_W/2-GRID_ACTUAL_SIZE/2);
-    private static final int GRID_START_Y = Math.max(SCREEN_PADDING, SCREEN_H/2-GRID_ACTUAL_SIZE/2);
+    private static final int GRID_START_X = Math.max(MIN_SCREEN_PADDING, SCREEN_W/2-GRID_ACTUAL_SIZE/2);
+    private static final int GRID_START_Y = Math.max(MIN_SCREEN_PADDING, SCREEN_H/2-GRID_ACTUAL_SIZE/2);
     
     private Color[][] grid = new Color[GRID_SIZE][GRID_SIZE];
     
